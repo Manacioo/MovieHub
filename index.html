@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MovieHub — Watch Movies & TV Shows Free</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== GLOBAL VIDEO BACKGROUND (non-home pages) ===== -->
+<!-- Injected by JS into each page banner -->
+
+<!-- HEADER -->
+<header id="site-header">
+  <div class="header-inner">
+    <div class="logo" onclick="showPage('home')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#3d8ef8" stroke-width="2"/><path d="M10 8l6 4-6 4V8z" fill="#3d8ef8"/></svg>
+      <span>Movie<em>Hub</em></span>
+    </div>
+
+    <!-- Nav: HOME always visible; rest only after login -->
+    <nav class="main-nav">
+      <a class="nav-link active" onclick="showPage('home')" data-page="home">HOME</a>
+      <a class="nav-link auth-only" onclick="showPage('movies')" data-page="movies">MOVIES</a>
+      <a class="nav-link auth-only" onclick="showPage('tvshows')" data-page="tvshows">TV SHOWS</a>
+      <a class="nav-link auth-only" onclick="showPage('topmovies')" data-page="topmovies">TOP IMDB</a>
+      <a class="nav-link auth-only" onclick="showPage('mylist')" data-page="mylist">MY LIST</a>
+      <a class="nav-link auth-only" onclick="showPage('team')" data-page="team">TEAM</a>
+    </nav>
+
+    <!-- Logged-OUT header right: Login + Sign Up buttons -->
+    <div class="header-right" id="header-guest">
+      <button class="btn-header-login" onclick="showLoginModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Login
+      </button>
+      <button class="btn-header-signup" onclick="showSignupModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        Sign Up
+      </button>
+    </div>
+
+    <!-- Logged-IN header right: Search + Avatar (hidden until login) -->
+    <div class="header-right auth-only" id="header-user" style="display:none">
+      <div class="search-wrap">
+        <input type="text" id="search-input" placeholder="Search for movies, TV shows..." onkeydown="if(event.key==='Enter')triggerSearch()" />
+        <button class="search-icon-btn" onclick="triggerSearch()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </button>
+      </div>
+      <div class="user-avatar" id="user-avatar-btn" onclick="toggleUserMenu()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <div class="user-menu" id="user-menu"></div>
+      </div>
+    </div>
+
+    <button class="hamburger" onclick="toggleMobileNav()" id="hamburger-btn">&#9776;</button>
+  </div>
+  <div class="mobile-nav" id="mobile-nav">
+    <a onclick="showPage('home');closeMobileNav()">HOME</a>
+    <!-- Mobile auth-only links -->
+    <a class="mobile-auth-only" onclick="showPage('movies');closeMobileNav()">MOVIES</a>
+    <a class="mobile-auth-only" onclick="showPage('tvshows');closeMobileNav()">TV SHOWS</a>
+    <a class="mobile-auth-only" onclick="showPage('topmovies');closeMobileNav()">TOP IMDB</a>
+    <a class="mobile-auth-only" onclick="showPage('mylist');closeMobileNav()">MY LIST</a>
+    <a class="mobile-auth-only" onclick="showPage('team');closeMobileNav()">TEAM</a>
+    <!-- Mobile guest links -->
+    <a class="mobile-guest-only" onclick="showLoginModal();closeMobileNav()">LOGIN</a>
+    <a class="mobile-guest-only" onclick="showSignupModal();closeMobileNav()">SIGN UP</a>
+  </div>
+</header>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page active" id="page-home">
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-bg">
+      <!-- =====================================================
+           VIDEO BACKGROUND
+           Replace "videos/hero.mp4" with your actual video path
+           e.g. "videos/myvideo.mp4" or "../videos/hero.mp4"
+           ===================================================== -->
+      <video
+        id="hero-video"
+        class="hero-video"
+        src="videos/hero.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+      ></video>
+      <div class="hero-video-overlay"></div>
+      <div class="hero-bg-gradient"></div>
+      <div class="hero-embers" id="hero-embers"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>Unlimited Movies,<br>TV Shows, and More</h1>
+        <p>Discover the best collection of movies and TV shows.<br>Anytime, anywhere.</p>
+        <!-- Change 3: Login icon + Sign Up side by side -->
+        <!-- Change 1: After login, hero CTA row is hidden -->
+        <div class="hero-cta-row" id="hero-cta-row">
+          <button class="btn-signup-hero" onclick="showSignupModal()">Sign Up Now</button>
+          <button class="btn-login-hero" onclick="showLoginModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Login
+          </button>
+        </div>
+      </div>
+
+      <!-- Change 2: Hero slide — shows rotating movie title + video bg, no cards -->
+      <div class="hero-slide-panel" id="hero-slide-panel">
+        <div class="hero-movie-title-wrap">
+          <span class="hero-now-showing">NOW SHOWING</span>
+          <div class="hero-movie-title" id="hero-movie-title"></div>
+        </div>
+        <!-- Dot indicators, one per HERO_SLIDES entry -->
+        <div class="hero-dots" id="hero-dots">
+          <span class="hero-dot active" onclick="goToHeroSlide(0)"></span>
+          <span class="hero-dot" onclick="goToHeroSlide(1)"></span>
+          <span class="hero-dot" onclick="goToHeroSlide(2)"></span>
+          <span class="hero-dot" onclick="goToHeroSlide(3)"></span>
+        </div>
+      </div>
+    </div>
+    <!-- Genre chips inside hero bottom -->
+    <div class="hero-genre-strip">
+      <div class="genre-strip-inner" id="home-genre-chips"></div>
+    </div>
+  </section>
+
+  <!-- TRENDING NOW -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2 class="section-title">Trending Now</h2>
+      <a class="see-all" onclick="showPage('movies')">See All ›</a>
+    </div>
+    <div class="movies-row" id="trending-grid"></div>
+  </section>
+
+  <!-- TOP RATED MOVIES -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2 class="section-title"><span class="star-icon">☆</span> Top Rated Movies</h2>
+      <a class="see-all" onclick="showPage('topmovies')">See All ›</a>
+    </div>
+    <div class="movies-row" id="top-rated-grid"></div>
+  </section>
+
+  <!-- POPULAR TV SHOWS -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2 class="section-title section-title-caps">Popular TV Shows</h2>
+      <a class="see-all" onclick="showPage('tvshows')">See All ›</a>
+    </div>
+    <div class="movies-row" id="popular-tv-grid"></div>
+  </section>
+
+  <!-- NEW RELEASES -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2 class="section-title">New Releases</h2>
+      <a class="see-all" onclick="showPage('movies')">See All ›</a>
+    </div>
+    <div class="movies-row" id="new-releases-grid"></div>
+  </section>
+</div>
+
+<!-- ===== MOVIES PAGE ===== -->
+<div class="page" id="page-movies">
+  <div class="mini-hero" id="mini-hero-movies">
+    <video class="mini-hero-video" autoplay muted loop playsinline></video>
+    <div class="mini-hero-overlay"></div>
+    <div class="mini-hero-embers"></div>
+    <div class="mini-hero-content">
+      <div class="mini-hero-text">
+        <h1>Movies</h1>
+        <p>Browse our full collection</p>
+      </div>
+      <div class="mini-hero-slide-panel">
+        <span class="mini-now-showing">NOW SHOWING</span>
+        <div class="mini-movie-title"></div>
+        <div class="mini-hero-dots"></div>
+      </div>
+    </div>
+  </div>
+  <section class="content-section">
+    <div class="genre-filter" id="movie-genre-filter"></div>
+    <div class="filter-bar">
+      <select id="movies-sort" onchange="renderMoviesPage()">
+        <option value="latest">Latest</option>
+        <option value="rating">Top Rated</option>
+        <option value="year">Year</option>
+        <option value="az">A–Z</option>
+      </select>
+      <span id="movies-count" class="result-count"></span>
+    </div>
+    <div class="movies-grid" id="movies-main-grid"></div>
+  </section>
+</div>
+
+<!-- ===== TV SHOWS PAGE ===== -->
+<div class="page" id="page-tvshows">
+  <div class="mini-hero" id="mini-hero-tvshows">
+    <video class="mini-hero-video" autoplay muted loop playsinline></video>
+    <div class="mini-hero-overlay"></div>
+    <div class="mini-hero-embers"></div>
+    <div class="mini-hero-content">
+      <div class="mini-hero-text">
+        <h1>TV Shows</h1>
+        <p>Stream your favourite series</p>
+      </div>
+      <div class="mini-hero-slide-panel">
+        <span class="mini-now-showing">NOW SHOWING</span>
+        <div class="mini-movie-title"></div>
+        <div class="mini-hero-dots"></div>
+      </div>
+    </div>
+  </div>
+  <section class="content-section">
+    <div class="genre-filter" id="tv-genre-filter"></div>
+    <div class="filter-bar">
+      <select id="tv-sort" onchange="renderTVPage()">
+        <option value="latest">Latest</option>
+        <option value="rating">Top Rated</option>
+        <option value="year">Year</option>
+        <option value="az">A–Z</option>
+      </select>
+      <span id="tv-count" class="result-count"></span>
+    </div>
+    <div class="movies-grid" id="tv-main-grid"></div>
+  </section>
+</div>
+
+<!-- ===== TOP IMDB PAGE ===== -->
+<div class="page" id="page-topmovies">
+  <div class="mini-hero" id="mini-hero-topmovies">
+    <video class="mini-hero-video" autoplay muted loop playsinline></video>
+    <div class="mini-hero-overlay"></div>
+    <div class="mini-hero-embers"></div>
+    <div class="mini-hero-content">
+      <div class="mini-hero-text">
+        <h1>⭐ Top IMDB</h1>
+        <p>Highest rated titles of all time</p>
+      </div>
+      <div class="mini-hero-slide-panel">
+        <span class="mini-now-showing">NOW SHOWING</span>
+        <div class="mini-movie-title"></div>
+        <div class="mini-hero-dots"></div>
+      </div>
+    </div>
+  </div>
+  <section class="content-section">
+    <div class="movies-grid" id="top-imdb-grid"></div>
+  </section>
+</div>
+
+<!-- ===== MY LIST PAGE ===== -->
+<div class="page" id="page-mylist">
+  <div class="mini-hero" id="mini-hero-mylist">
+    <video class="mini-hero-video" autoplay muted loop playsinline></video>
+    <div class="mini-hero-overlay"></div>
+    <div class="mini-hero-embers"></div>
+    <div class="mini-hero-content">
+      <div class="mini-hero-text">
+        <h1>My List</h1>
+        <p>Your personal watchlist</p>
+      </div>
+      <div class="mini-hero-slide-panel">
+        <span class="mini-now-showing">NOW SHOWING</span>
+        <div class="mini-movie-title"></div>
+        <div class="mini-hero-dots"></div>
+      </div>
+    </div>
+  </div>
+  <section class="content-section">
+    <div class="movies-grid" id="mylist-grid"></div>
+    <div id="mylist-empty" style="display:none;text-align:center;padding:4rem 0;color:#5577aa;">
+      <div style="font-size:3rem;margin-bottom:1rem">🎬</div>
+      <p style="font-size:16px;margin-bottom:0.5rem">Your list is empty</p>
+      <p style="font-size:13px">Add movies and shows to watch later</p>
+    </div>
+  </section>
+</div>
+
+<!-- ===== SEARCH PAGE ===== -->
+<div class="page" id="page-search">
+  <section class="content-section" style="padding-top:2rem">
+    <div class="section-header">
+      <h2 class="section-title" id="search-results-title">Search Results</h2>
+    </div>
+    <div class="movies-grid" id="search-results-grid"></div>
+  </section>
+</div>
+
+<!-- ===== WATCH PAGE ===== -->
+<div class="page" id="page-watch">
+  <div class="watch-container">
+    <button class="back-btn" onclick="goBack()">&#8592; Back</button>
+    <div class="watch-player">
+      <div class="player-placeholder">
+        <div class="play-big">&#9654;</div>
+        <p id="now-playing-title">Now Playing</p>
+        <p class="player-sub">Embed your video stream source here</p>
+      </div>
+    </div>
+    <div class="watch-info" id="watch-info"></div>
+    <div class="watch-related">
+      <h3>You May Also Like</h3>
+      <div class="movies-grid" id="related-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DETAIL MODAL ===== -->
+<div class="modal-overlay" id="detail-modal" onclick="closeModal(event)">
+  <div class="modal-box" id="modal-content"></div>
+</div>
+
+<!-- ===== LOGIN MODAL ===== -->
+<div class="modal-overlay" id="login-modal" onclick="closeLoginModal(event)">
+  <div class="modal-box auth-modal-box">
+    <button class="modal-close" onclick="document.getElementById('login-modal').classList.remove('open')">&#10005;</button>
+    <div class="auth-modal-header">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#3d8ef8" stroke-width="1.5"/><path d="M10 8l6 4-6 4V8z" fill="#3d8ef8"/></svg>
+      <h2>Welcome Back</h2>
+      <p>Login to access your watchlist</p>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" placeholder="you@example.com" class="form-input" id="login-email"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" placeholder="••••••••" class="form-input" id="login-password"/>
+    </div>
+    <button class="btn-submit" onclick="fakeLogin()">Login to MovieHub</button>
+    <p class="auth-switch">No account? <a onclick="switchToSignup()">Sign Up Free</a></p>
+  </div>
+</div>
+
+<!-- ===== SIGNUP MODAL ===== -->
+<div class="modal-overlay" id="signup-modal" onclick="closeSignupModal(event)">
+  <div class="modal-box auth-modal-box">
+    <button class="modal-close" onclick="document.getElementById('signup-modal').classList.remove('open')">&#10005;</button>
+    <div class="auth-modal-header">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#3d8ef8" stroke-width="1.5"/><path d="M10 8l6 4-6 4V8z" fill="#3d8ef8"/></svg>
+      <h2>Create Account</h2>
+      <p>Join MovieHub for free today</p>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" placeholder="John" class="form-input" id="signup-firstname"/>
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" placeholder="Doe" class="form-input" id="signup-lastname"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" placeholder="you@example.com" class="form-input" id="signup-email"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" placeholder="Create a strong password" class="form-input" id="signup-password"/>
+    </div>
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <input type="password" placeholder="Repeat your password" class="form-input" id="signup-confirm"/>
+    </div>
+    <div class="form-group form-checkbox">
+      <input type="checkbox" id="signup-agree"/>
+      <label for="signup-agree">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+    </div>
+    <button class="btn-submit" onclick="fakeSignup()">Create Free Account</button>
+    <p class="auth-switch">Already have an account? <a onclick="switchToLogin()">Login</a></p>
+  </div>
+</div>
+
+<!-- ===== TEAM PAGE ===== -->
+<div class="page" id="page-team">
+  <div class="mini-hero" id="mini-hero-team">
+    <video class="mini-hero-video" autoplay muted loop playsinline></video>
+    <div class="mini-hero-overlay"></div>
+    <div class="mini-hero-embers"></div>
+    <div class="mini-hero-content">
+      <div class="mini-hero-text">
+        <h1>Meet the Team</h1>
+        <p>The Brains who built MovieHub</p>
+      </div>
+      <div class="mini-hero-slide-panel">
+        <span class="mini-now-showing">NOW SHOWING</span>
+        <div class="mini-movie-title"></div>
+        <div class="mini-hero-dots"></div>
+      </div>
+    </div>
+  </div>
+  <section class="content-section team-section">
+    <div class="team-grid" id="team-grid"></div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#3d8ef8" stroke-width="2"/><path d="M10 8l6 4-6 4V8z" fill="#3d8ef8"/></svg>
+          <span>Movie<em>Hub</em></span>
+        </div>
+        <p>Stream movies &amp; TV shows for free. HD quality, updated daily.</p>
+      </div>
+      <div class="footer-nav-col">
+        <h4>Navigation</h4>
+        <a onclick="showPage('home')">Home</a>
+        <a onclick="showPage('movies')">Movies</a>
+        <a onclick="showPage('tvshows')">TV Shows</a>
+        <a onclick="showPage('topmovies')">Top IMDB</a>
+        <a onclick="showPage('mylist')">My List</a>
+        <a onclick="showPage('team')">Team</a>
+      </div>
+      <div class="footer-nav-col">
+        <h4>Genres</h4>
+        <a onclick="filterByGenre('Action')">Action</a>
+        <a onclick="filterByGenre('Comedy')">Comedy</a>
+        <a onclick="filterByGenre('Drama')">Drama</a>
+        <a onclick="filterByGenre('Horror')">Horror</a>
+        <a onclick="filterByGenre('Sci-Fi')">Sci-Fi</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 MovieHub. For educational/demo purposes only. All rights belong to respective owners.</p>
+    </div>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
