@@ -8,9 +8,7 @@ MovieHub is a fully client-side movie and TV show streaming interface designed t
 
 ## Live Site
 
-[View Hosted Website](https://your-github-username.github.io/moviehub)
-
-> Replace the link above with your actual GitHub Pages URL before submission.
+[View Hosted Website](https://manacioo.github.io/MovieHub/)
 
 ---
 
