@@ -218,6 +218,11 @@ function showPage(name) {
   if (name === 'topmovies') renderTopImdb();
   if (name === 'mylist')    renderMyList();
   if (name === 'team')      renderTeam();
+  // Pause video when leaving watch page
+  if (name !== 'watch') {
+    const vp = document.getElementById('main-video-player');
+    if (vp && !vp.paused) vp.pause();
+  }
 }
 
 function goBack() { showPage(prevPage || 'home'); }
@@ -578,7 +583,13 @@ function watchMovie(id) {
   currentWatchItem = item;
   document.getElementById('detail-modal').classList.remove('open');
 
-  document.getElementById('now-playing-title').textContent = item.title;
+  const videoPlayer = document.getElementById('main-video-player');
+  const videoSource = document.getElementById('main-video-source');
+  if (videoPlayer && videoSource && item.trailer) {
+    videoSource.src = item.trailer;
+    videoPlayer.load();
+    videoPlayer.play().catch(() => {}); // autoplay may be blocked by browser; fine
+  }
 
   document.getElementById('watch-info').innerHTML = `
     <div class="watch-title">${item.title}</div>
