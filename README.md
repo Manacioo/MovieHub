@@ -195,7 +195,7 @@ moviehub/
 | Maanas Vishnu | Member 1 | Project lead, JavaScript logic, hero slideshow, modal system, page navigation |
 | Muhammed Sahad | Member 2 | CSS layout and styling, responsive design, mini-hero banners, card design |
 | Aswathy B Kumar | Member 3 | HTML structure, authentication modals, form validation, watch page |
-| Gaadha Jayakumar | Member 4 | Data layer, team page, genre filters, search functionality, README |
+| Gaadha Jayakumar | Member 4 | Data layer, team page, genre filters, search functionality, CSS layout and styling |
 
 ---
 
