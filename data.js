@@ -1,18 +1,12 @@
-// ===== MOVIEHUB DATABASE =====
-// Replace posterColor with actual image URLs if you have them
-// e.g. poster: 'images/avengers.jpg'
-
-// ===== HERO CAROUSEL CONFIG =====
-// Each entry: title shown on hero, video background path, and optional poster image path
+// Hero carousel — 4 slides cycling every 10s
 const HERO_SLIDES = [
   { title: "Iron Man",             video: "videos/hero1.mp4"},
   { title: "Avatar: Fire and Ash", video: "videos/hero2.mp4" },
-  { title: "Spider-Man",    video: "videos/hero3.mp4"},
-  { title: "Fast And Furious",            video: "videos/hero4.mp4"},
+  { title: "Spider-Man",           video: "videos/hero3.mp4"},
+  { title: "Fast And Furious",     video: "videos/hero4.mp4"},
 ];
 
 const MOVIES = [
-  // Action / Trending
   { id:1,  title:"The Boys",                  year:2019, rating:8.4, type:"TV Series", genres:["Action","Drama","Sci-Fi"],        quality:"HD",  description:"A group of vigilantes known as 'The Boys' set out to take down corrupt superheroes who abuse their powers. A dark satire of superhero culture.",                     cast:["Karl Urban","Jack Quaid","Antony Starr"],              director:"Eric Kripke",          duration:"60 min/ep", poster:"images/posters/the_boys.jpg",                  posterColor:"#1a0a2e", trailer:"videos/trailers/the_boys_trailer.mp4",                  trending:true },
   { id:2,  title:"The Super Mario Bros. Movie",year:2026, rating:6.9, type:"Movie",     genres:["Animation","Adventure","Comedy"], quality:"CAM", description:"Mario and his brother Luigi are transported to the Mushroom Kingdom where they must save Princess Peach from the clutches of Bowser.",                           cast:["Chris Pratt","Anya Taylor-Joy","Jack Black"],          director:"Aaron Horvath",        duration:"92 min",    poster:"images/posters/super_mario.jpg",               posterColor:"#1a1a0a", trailer:"videos/trailers/super_mario_trailer.mp4",               trending:true },
   { id:3,  title:"Thrash",                     year:2026, rating:6.1, type:"Movie",     genres:["Action","Thriller"],              quality:"CAM", description:"A gritty underground street racing thriller set across the neon-lit streets of a dystopian city.",                                                           cast:["John Boyega","Zendaya","Oscar Isaac"],                 director:"Chad Stahelski",       duration:"110 min",   poster:"images/posters/thrash.jpg",                    posterColor:"#1a0000", trailer:"videos/trailers/thrash_trailer.mp4",                    trending:true },
@@ -21,8 +15,6 @@ const MOVIES = [
   { id:6,  title:"One Piece",                   year:1999, rating:8.7, type:"TV Series", genres:["Animation","Action","Adventure"], quality:"HD",  description:"Monkey D. Luffy and his pirate crew explore a vast ocean in search of the legendary treasure 'One Piece' to become King of the Pirates.",              cast:["Mayumi Tanaka","Akemi Okamura","Kazuya Nakai"],        director:"Eiichiro Oda",         duration:"24 min/ep", poster:"images/posters/one_piece.jpg",                 posterColor:"#0a1520", trailer:"videos/trailers/one_piece_trailer.mp4",                 trending:true },
   { id:7,  title:"Outcome",                     year:2026, rating:7.2, type:"Movie",     genres:["Drama","Thriller"],               quality:"HD",  description:"A high-stakes political thriller about a disgraced diplomat who uncovers a massive conspiracy that reaches the highest levels of government.",              cast:["Idris Elba","Viola Davis","Michael B. Jordan"],        director:"Ava DuVernay",         duration:"118 min",   poster:"images/posters/outcome.jpg",                   posterColor:"#0f0a00", trailer:"videos/trailers/outcome_trailer.mp4",                   trending:true },
   { id:8,  title:"The Bride!",                  year:2026, rating:6.3, type:"Movie",     genres:["Horror","Romance"],               quality:"CAM", description:"A modern retelling of Bride of Frankenstein, following a young woman who discovers she was created in a laboratory.",                                       cast:["Jessie Buckley","Christian Bale","Penélope Cruz"],     director:"Maggie Gyllenhaal",    duration:"125 min",   poster:"images/posters/the_bride.jpg",                 posterColor:"#1a0a0f", trailer:"videos/trailers/the_bride_trailer.mp4",                 trending:true },
-
-  // Latest Movies
   { id:9,  title:"Malcolm in the Middle",      year:2026, rating:7.8, type:"Movie",     genres:["Comedy","Drama"],                 quality:"HD",  description:"Cult favourite family returns in a long-awaited feature film continuation of the beloved series.",                                                           cast:["Frankie Muniz","Bryan Cranston","Jane Kaczmarek"],     director:"Todd Holland",         duration:"95 min",    poster:"images/posters/malcolm_in_the_middle.jpg",     posterColor:"#1a1a00", trailer:"videos/trailers/malcolm_trailer.mp4" },
   { id:10, title:"Maul: Shadow Lord",          year:2026, rating:7.5, type:"Movie",     genres:["Action","Sci-Fi"],                quality:"HD",  description:"Darth Maul's untold origins are explored in this Star Wars prequel, revealing his path from Dathomir to becoming the Sith Lord's apprentice.",           cast:["Ray Park","Sam Witwer","Katee Sackhoff"],              director:"Dave Filoni",          duration:"135 min",   poster:"images/posters/maul_shadow_lord.jpg",          posterColor:"#1a0000", trailer:"videos/trailers/maul_trailer.mp4" },
   { id:11, title:"Daredevil: Born Again",      year:2026, rating:8.0, type:"TV Series", genres:["Action","Drama","Crime"],         quality:"HD",  description:"Matt Murdock's world is shattered when Kingpin becomes Mayor of New York City, forcing him to don the mask once more.",                                    cast:["Charlie Cox","Vincent D'Onofrio","Deborah Ann Woll"],  director:"Dario Scardapane",     duration:"55 min/ep", poster:"images/posters/daredevil_born_again.jpg",      posterColor:"#1a0000", trailer:"videos/trailers/daredevil_trailer.mp4" },
@@ -49,18 +41,17 @@ const MOVIES = [
   { id:105,title:"Forrest Gump",              year:1994, rating:8.8, type:"Movie",     genres:["Drama","Romance"],                quality:"HD",  description:"The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold from the perspective of an Alabama man with an IQ of 75.", cast:["Tom Hanks","Robin Wright","Gary Sinise"],            director:"Robert Zemeckis",      duration:"142 min",   poster:"images/posters/forrest_gump.jpg",              posterColor:"#0a1a0a", trailer:"videos/trailers/forrest_gump_trailer.mp4",              topImdb:true },
   { id:106,title:"Inception",                 year:2010, rating:8.8, type:"Movie",     genres:["Action","Sci-Fi","Thriller"],     quality:"HD",  description:"A thief who steals corporate secrets through dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",        cast:["Leonardo DiCaprio","Joseph Gordon-Levitt","Elliot Page"],director:"Christopher Nolan",  duration:"148 min",   poster:"images/posters/inception.jpg",                 posterColor:"#000a1a", trailer:"videos/trailers/inception_trailer.mp4",                 topImdb:true },
   { id:107,title:"Breaking Bad",              year:2008, rating:9.5, type:"TV Series", genres:["Crime","Drama","Thriller"],       quality:"HD",  description:"A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student.",        cast:["Bryan Cranston","Aaron Paul","Anna Gunn"],             director:"Vince Gilligan",       duration:"47 min/ep", poster:"images/posters/breaking_bad.jpg",              posterColor:"#1a1a00", trailer:"videos/trailers/breaking_bad_trailer.mp4",              topImdb:true },
-  { id:108,title:"10 Things I Hate About You",          year:2023, rating:9.3, type:"TV Series", genres:["Documentary"],                    quality:"HD",  description:"David Attenborough narrates this stunning exploration of Earth's most extraordinary habitats and the remarkable animals that call them home.",            cast:["David Attenborough"],                                  director:"Various",              duration:"60 min/ep", poster:"images/posters/10_things_i_hate_about_you.jpg",             posterColor:"#001a0a", trailer:"videos/trailers/10_things_i_hate_about_you_trailer.mp4",             topImdb:true },
+  { id:108,title:"10 Things I Hate About You",year:2023, rating:9.3, type:"TV Series", genres:["Documentary"],                    quality:"HD",  description:"David Attenborough narrates this stunning exploration of Earth's most extraordinary habitats and the remarkable animals that call them home.",            cast:["David Attenborough"],                                  director:"Various",              duration:"60 min/ep", poster:"images/posters/10_things_i_hate_about_you.jpg", posterColor:"#001a0a", trailer:"videos/trailers/10_things_i_hate_about_you_trailer.mp4", topImdb:true },
 ];
 
-// ===== TEAM DATA =====
-// Edit this array to add yourself and your teammates
+// Add your team members here; photo path relative to project root
 const TEAM = [
   {
     name: "Maanas Vishnu ",
     role: "Member 1",
     initials: "M",
     avatarColor: "#1a2e1a",
-    photo: "images/maanas.jpeg",           // ← PHOTO PATH (already added)
+    photo: "images/maanas.jpeg",
     portfolio: "https://manacioo.github.io/Maanas_portfolio/",
     github: "https://github.com/Manacioo",
     linkedin: "www.linkedin.com/in/manacioo-vishnu-b51139402"
@@ -70,7 +61,7 @@ const TEAM = [
     role: "Member 2",
     initials: "S",
     avatarColor:"#2e1a1a",
-    photo: "images/sahad.jpeg",             // ← ADD YOUR PHOTO: drop the file into the images/ folder and update this filename
+    photo: "images/sahad.jpeg",
     portfolio: "https://sahad-s.github.io/Portfolio-website-/",
     github: "https://github.com/sahad-s",
     linkedin: "https://www.linkedin.com/in/muhammed-sahad-s-b03367334"
@@ -80,7 +71,7 @@ const TEAM = [
     role: "Member 3",
     initials: "A",
     avatarColor: "#1a1a2e",
-    photo: "images/aswathy.jpeg",           // ← ADD YOUR PHOTO: drop the file into the images/ folder and update this filename
+    photo: "images/aswathy.jpeg",
     portfolio: "https://babushka-ops.github.io/aswathy_portfolio/",
     github: "https://github.com/babushka-ops",
     linkedin: "https://www.linkedin.com/in/aswathy-b-kumar-109740334"
@@ -90,7 +81,7 @@ const TEAM = [
     role: "Member 4",
     initials: "G",
     avatarColor: "#2e1a2a",
-    photo: "images/gaadha.jpeg",            // ← ADD YOUR PHOTO: drop the file into the images/ folder and update this filename
+    photo: "images/gaadha.jpeg",
     portfolio: "https://gaadha72.github.io/portfolio/",
     github: "https://github.com/gaadha72",
     linkedin: "https://www.linkedin.com/in/gaadha-jayakumar-444738334"

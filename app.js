@@ -1,5 +1,3 @@
-// ===== MOVIEHUB APP =====
-
 let currentPage = 'home';
 let prevPage = 'home';
 let activeMovieGenre = 'All';
@@ -10,14 +8,10 @@ let myList = [];
 let isLoggedIn = false;
 let loggedInUser = { name: '', email: '' };
 
-// ===== HERO SLIDE CONFIG =====
-// Uses HERO_SLIDES from data.js
-// Each slide: { title, video, poster }
 let heroSlideIndex = 0;
 let heroSlideTimer = null;
-const HERO_SLIDE_INTERVAL = 10000; // 10 seconds
+const HERO_SLIDE_INTERVAL = 10000;
 
-// ===== HERO SLIDES =====
 function initHeroSlides() {
   renderHeroSlide(0);
   heroSlideTimer = setInterval(() => {
@@ -30,7 +24,6 @@ function renderHeroSlide(index) {
   const slide = HERO_SLIDES[index];
   if (!slide) return;
 
-  // Update movie title display
   const titleEl = document.getElementById('hero-movie-title');
   if (titleEl) {
     titleEl.style.opacity = '0';
@@ -40,12 +33,10 @@ function renderHeroSlide(index) {
     }, 400);
   }
 
-  // Update dot indicators
   document.querySelectorAll('.hero-dot').forEach((d, i) => {
     d.classList.toggle('active', i === index);
   });
 
-  // Switch background video
   switchHeroVideo(slide.video);
 }
 
@@ -70,8 +61,6 @@ function switchHeroVideo(src) {
   video.addEventListener('error', () => { video.style.display = 'none'; }, { once: true });
 }
 
-
-// ===== POSTER GRADIENT COLOURS =====
 const POSTER_GRADIENTS = [
   ['#0d1a3a','#1a0a2e'],['#1a0a00','#2e1a00'],['#001a1a','#0a2e2e'],
   ['#1a001a','#2e002e'],['#001a0a','#002e1a'],['#0a0a1a','#1a1a2e'],
@@ -83,17 +72,12 @@ function getPosterStyle(item) {
   return `background:linear-gradient(145deg,${c1},${c2});`;
 }
 
-// (hero video init is handled by initHeroSlides)
-
-// ===== MINI-HERO SLIDES (for non-home pages) =====
-// Shares the same HERO_SLIDES data as home
 let miniSlideIndex = 0;
 let miniSlideTimer = null;
 const MINI_SLIDE_INTERVAL = 10000;
 const MINI_HERO_PAGE_IDS = ['movies', 'tvshows', 'topmovies', 'mylist', 'team'];
 
 function initMiniHeroSlides() {
-  // Build dots for every mini-hero
   MINI_HERO_PAGE_IDS.forEach(pageId => {
     const hero = document.getElementById(`mini-hero-${pageId}`);
     if (!hero) return;
@@ -102,7 +86,6 @@ function initMiniHeroSlides() {
     dotsWrap.innerHTML = HERO_SLIDES.map((_, i) =>
       `<span class="mini-dot${i === 0 ? ' active' : ''}" onclick="goToMiniSlide(${i})"></span>`
     ).join('');
-    // Seed embers
     seedMiniEmbers(hero.querySelector('.mini-hero-embers'));
   });
   renderMiniSlide(0);
@@ -120,7 +103,6 @@ function renderMiniSlide(index) {
     const hero = document.getElementById(`mini-hero-${pageId}`);
     if (!hero) return;
 
-    // Update title with fade
     const titleEl = hero.querySelector('.mini-movie-title');
     if (titleEl) {
       titleEl.style.opacity = '0';
@@ -130,12 +112,10 @@ function renderMiniSlide(index) {
       }, 400);
     }
 
-    // Update dots
     hero.querySelectorAll('.mini-dot').forEach((d, i) => {
       d.classList.toggle('active', i === index);
     });
 
-    // Switch video
     const video = hero.querySelector('.mini-hero-video');
     if (video) {
       video.style.opacity = '0';
@@ -177,33 +157,25 @@ function seedMiniEmbers(container) {
   }
 }
 
-// ===== EMBER PARTICLES =====
 function createEmbers() {
   const container = document.getElementById('hero-embers');
   if (!container) return;
-  const count = 30;
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < 30; i++) {
     const ember = document.createElement('div');
     ember.className = 'ember';
     const size = Math.random() * 3 + 1;
-    const left = Math.random() * 100;
-    const delay = Math.random() * 8;
-    const duration = Math.random() * 6 + 6;
-    const drift = (Math.random() - 0.5) * 80;
-    const startBottom = Math.random() * 40;
     ember.style.cssText = `
       width:${size}px; height:${size}px;
-      left:${left}%;
-      bottom:${startBottom}%;
-      animation-delay:${delay}s;
-      animation-duration:${duration}s;
-      --drift:${drift}px;
+      left:${Math.random()*100}%;
+      bottom:${Math.random()*40}%;
+      animation-delay:${Math.random()*8}s;
+      animation-duration:${Math.random()*6+6}s;
+      --drift:${(Math.random()-0.5)*80}px;
     `;
     container.appendChild(ember);
   }
 }
 
-// ===== PAGE NAVIGATION =====
 function showPage(name) {
   prevPage = currentPage;
   currentPage = name;
@@ -227,7 +199,6 @@ function showPage(name) {
 
 function goBack() { showPage(prevPage || 'home'); }
 
-// ===== MOBILE NAV =====
 function toggleMobileNav() {
   document.getElementById('mobile-nav').classList.toggle('open');
 }
@@ -235,7 +206,6 @@ function closeMobileNav() {
   document.getElementById('mobile-nav').classList.remove('open');
 }
 
-// ===== USER MENU =====
 function toggleUserMenu() {
   document.getElementById('user-avatar-btn').classList.toggle('open');
 }
@@ -244,7 +214,6 @@ document.addEventListener('click', (e) => {
   if (av && !av.contains(e.target)) av.classList.remove('open');
 });
 
-// ===== RENDER CARD =====
 function renderCard(item, showRank) {
   const badge = item.quality === 'HD'
     ? '<span class="badge badge-hd">HD</span>'
@@ -254,7 +223,6 @@ function renderCard(item, showRank) {
   const rankBadge = showRank ? `<span class="badge badge-top">#${showRank}</span>` : '';
   const typeTag = item.type !== 'Movie'
     ? `<span class="card-type">${item.type}</span>` : '';
-  const inList = myList.includes(item.id);
 
   const posterHTML = item.poster
     ? `<img src="${item.poster}" alt="${item.title}" class="card-poster-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
@@ -287,7 +255,6 @@ function renderCard(item, showRank) {
   </div>`;
 }
 
-// ===== HOME GENRE CHIPS =====
 const HOME_GENRES = ['All','Action','Comedy','Drama','Sci-Fi','Thriller','Romance','Animation','Crime','Fantasy','Horror'];
 
 function renderHomeGenreChips() {
@@ -304,24 +271,19 @@ function setHomeGenre(g) {
   renderHomeSections();
 }
 
-// ===== HOME PAGE =====
 function renderHomeSections() {
   const filter = (items) => activeHomeGenre === 'All' ? items
     : items.filter(m => m.genres.includes(activeHomeGenre));
 
-  // Trending Now
   const trending = filter(MOVIES.filter(m => m.trending));
   document.getElementById('trending-grid').innerHTML = trending.map(m => renderCard(m)).join('');
 
-  // Top Rated Movies
   const topRated = filter(MOVIES.filter(m => m.topImdb)).sort((a, b) => b.rating - a.rating).slice(0, 12);
   document.getElementById('top-rated-grid').innerHTML = topRated.map((m, i) => renderCard(m, i + 1)).join('');
 
-  // Popular TV Shows
   const tvShows = filter(MOVIES.filter(m => m.type === 'TV Series')).slice(0, 12);
   document.getElementById('popular-tv-grid').innerHTML = tvShows.map(m => renderCard(m)).join('');
 
-  // New Releases
   const newReleases = filter(MOVIES.filter(m => m.type === 'Movie' && !m.topImdb))
     .sort((a, b) => b.year - a.year).slice(0, 12);
   document.getElementById('new-releases-grid').innerHTML = newReleases.map(m => renderCard(m)).join('');
@@ -332,7 +294,6 @@ function renderHome() {
   renderHomeSections();
 }
 
-// ===== MOVIES PAGE =====
 function renderMoviesPage() {
   const genre = activeMovieGenre;
   let items = MOVIES.filter(m => m.type === 'Movie' || m.type === 'TV Series').filter(m => !m.topImdb);
@@ -361,7 +322,6 @@ function setMovieGenre(g) {
   renderMoviesPage();
 }
 
-// ===== TV PAGE =====
 function renderTVPage() {
   const genre = activeTVGenre;
   let items = MOVIES.filter(m => m.type === 'TV Series');
@@ -390,13 +350,11 @@ function setTVGenre(g) {
   renderTVPage();
 }
 
-// ===== TOP IMDB =====
 function renderTopImdb() {
   const items = MOVIES.filter(m => m.topImdb).sort((a, b) => b.rating - a.rating);
   document.getElementById('top-imdb-grid').innerHTML = items.map((m, i) => renderCard(m, i + 1)).join('');
 }
 
-// ===== MY LIST =====
 function renderMyList() {
   const items = MOVIES.filter(m => myList.includes(m.id));
   const grid = document.getElementById('mylist-grid');
@@ -420,7 +378,6 @@ function toggleMyList(id, title) {
   }
 }
 
-// ===== DETAIL MODAL — FLIP "expand from card" animation =====
 function openDetail(id, cardEl) {
   const item = MOVIES.find(m => m.id === id);
   if (!item) return;
@@ -441,13 +398,13 @@ function openDetail(id, cardEl) {
          <div class="mpp-title">${item.title}</div>
        </div>`;
 
+  // Trailer plays as modal hero background video
   const heroBgVideo = item.trailer
     ? `<video class="modal-hero-bg-video" autoplay muted loop playsinline>
          <source src="${item.trailer}" type="video/mp4">
        </video>`
     : '';
 
-  // Build modal HTML
   document.getElementById('modal-content').innerHTML = `
     <button class="modal-close" onclick="closeDetailModal()">&#10005;</button>
     <div class="modal-hero-area">
@@ -487,40 +444,33 @@ function openDetail(id, cardEl) {
     </div>
   `;
 
-  // ---- FLIP animation ----
+  // FLIP animation: expand modal from card position
   const overlay   = document.getElementById('detail-modal');
   const modalBox  = document.getElementById('modal-content');
 
-  // 1. Get card's bounding rect BEFORE showing overlay
   const cardRect = cardEl
     ? cardEl.getBoundingClientRect()
     : { left: window.innerWidth/2 - 90, top: window.innerHeight/2 - 130, width: 180, height: 270 };
 
-  // 2. Show overlay (invisible yet) so we can measure modal's final rect
   overlay.classList.add('open');
   overlay.style.pointerEvents = 'none';
 
-  // 3. Measure modal's final position
   const modalRect = modalBox.getBoundingClientRect();
 
-  // 4. Compute transform: scale + translate from card → modal
   const scaleX  = cardRect.width  / modalRect.width;
   const scaleY  = cardRect.height / modalRect.height;
   const dx = cardRect.left + cardRect.width  / 2 - (modalRect.left + modalRect.width  / 2);
   const dy = cardRect.top  + cardRect.height / 2 - (modalRect.top  + modalRect.height / 2);
 
-  // 5. Start: snap modal to card's position/size — no transition yet
   modalBox.style.transition = 'none';
   modalBox.style.transform  = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
   modalBox.style.opacity    = '0.3';
   modalBox.style.borderRadius = '8px';
 
-  // Also start overlay fully transparent
   overlay.style.transition  = 'none';
   overlay.style.background  = 'rgba(0,0,0,0)';
   overlay.style.backdropFilter = 'blur(0px)';
 
-  // 6. Next frame: animate to final state
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       modalBox.style.transition = 'transform 1s cubic-bezier(0.22,1,0.36,1), opacity 0.32s ease, border-radius 0.42s ease';
@@ -540,11 +490,9 @@ function closeDetailModal() {
   const overlay  = document.getElementById('detail-modal');
   const modalBox = document.getElementById('modal-content');
 
-  // Stop trailer video
   const bgVid = modalBox.querySelector('.modal-hero-bg-video');
   if (bgVid) { bgVid.pause(); bgVid.src = ''; }
 
-  // Animate out: shrink + fade
   modalBox.style.transition = 'transform 1s cubic-bezier(0.55,0,1,0.45), opacity 0.22s ease';
   modalBox.style.transform  = 'scale(0.88)';
   modalBox.style.opacity    = '0';
@@ -554,7 +502,6 @@ function closeDetailModal() {
 
   setTimeout(() => {
     overlay.classList.remove('open');
-    // Reset inline styles for next open
     modalBox.style.transition    = '';
     modalBox.style.transform     = '';
     modalBox.style.opacity       = '';
@@ -576,7 +523,6 @@ function closeModal(e) {
   }
 }
 
-// ===== WATCH PAGE =====
 function watchMovie(id) {
   const item = MOVIES.find(m => m.id === id);
   if (!item) return;
@@ -588,7 +534,7 @@ function watchMovie(id) {
   if (videoPlayer && videoSource && item.trailer) {
     videoSource.src = item.trailer;
     videoPlayer.load();
-    videoPlayer.play().catch(() => {}); // autoplay may be blocked by browser; fine
+    videoPlayer.play().catch(() => {});
   }
 
   document.getElementById('watch-info').innerHTML = `
@@ -614,14 +560,8 @@ function watchMovie(id) {
   showPage('watch');
 }
 
-// ===== SEARCH =====
 function triggerSearch() {
   const q = document.getElementById('search-input').value.trim();
-  if (!q) return;
-  doSearch(q);
-}
-function triggerHeroSearch() {
-  const q = document.getElementById('hero-search')?.value.trim();
   if (!q) return;
   doSearch(q);
 }
@@ -649,23 +589,19 @@ function filterByGenre(genre) {
   renderMovieGenreFilter();
 }
 
-// ===== AUTH STATE =====
 function setLoggedIn(name, email) {
   isLoggedIn = true;
   loggedInUser = { name, email };
   document.body.classList.add('logged-in');
 
-  // Hide hero CTA buttons (Sign Up + Login) after login
   const heroCta = document.getElementById('hero-cta-row');
   if (heroCta) heroCta.style.display = 'none';
 
-  // Swap header panels
   document.getElementById('header-guest').style.display = 'none';
   const userBar = document.getElementById('header-user');
   userBar.style.removeProperty('display');
   userBar.style.display = 'flex';
 
-  // Build avatar initials + user-menu
   const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
   const av = document.getElementById('user-avatar-btn');
   av.innerHTML = `
@@ -692,7 +628,6 @@ function logOut() {
   loggedInUser = { name: '', email: '' };
   document.body.classList.remove('logged-in');
 
-  // Show hero CTA buttons again
   const heroCta = document.getElementById('hero-cta-row');
   if (heroCta) heroCta.style.display = '';
   document.getElementById('header-guest').style.display = 'flex';
@@ -705,7 +640,6 @@ function logOut() {
   showToast('You have been logged out.');
 }
 
-// ===== LOGIN MODAL =====
 function showLoginModal() {
   document.getElementById('signup-modal').classList.remove('open');
   document.getElementById('login-modal').classList.add('open');
@@ -727,7 +661,6 @@ function fakeLogin() {
   showToast(`Welcome back, ${email.split('@')[0]}!`);
 }
 
-// ===== SIGNUP MODAL =====
 function showSignupModal() {
   document.getElementById('login-modal').classList.remove('open');
   document.getElementById('signup-modal').classList.add('open');
@@ -765,12 +698,10 @@ function switchToLogin() {
   document.getElementById('login-modal').classList.add('open');
 }
 
-// ===== TEAM PAGE =====
 function renderTeam() {
   const grid = document.getElementById('team-grid');
   if (!grid) return;
   grid.innerHTML = TEAM.map(member => {
-    // Build initials avatar or photo if a photo path is provided
     const avatarInner = member.photo
       ? `<img src="${member.photo}" alt="${member.name}" class="team-avatar-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
          <span class="team-initials" style="display:none">${member.initials}</span>`
@@ -796,7 +727,6 @@ function renderTeam() {
   }).join('');
 }
 
-// ===== TOAST =====
 function showToast(msg) {
   let toast = document.getElementById('toast');
   if (!toast) {
@@ -810,7 +740,6 @@ function showToast(msg) {
   toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-// ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
   createEmbers();
   initHeroSlides();
@@ -819,4 +748,3 @@ document.addEventListener('DOMContentLoaded', () => {
   renderMovieGenreFilter();
   renderTVGenreFilter();
 });
-

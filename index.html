@@ -9,9 +9,6 @@
 </head>
 <body>
 
-<!-- ===== GLOBAL VIDEO BACKGROUND (non-home pages) ===== -->
-<!-- Injected by JS into each page banner -->
-
 <!-- HEADER -->
 <header id="site-header">
   <div class="header-inner">
@@ -20,7 +17,7 @@
       <span>Movie<em>Hub</em></span>
     </div>
 
-    <!-- Nav: HOME always visible; rest only after login -->
+    <!-- HOME always visible; rest only after login -->
     <nav class="main-nav">
       <a class="nav-link active" onclick="showPage('home')" data-page="home">HOME</a>
       <a class="nav-link auth-only" onclick="showPage('movies')" data-page="movies">MOVIES</a>
@@ -30,7 +27,7 @@
       <a class="nav-link auth-only" onclick="showPage('team')" data-page="team">TEAM</a>
     </nav>
 
-    <!-- Logged-OUT header right: Login + Sign Up buttons -->
+    <!-- Guest header: Login + Sign Up -->
     <div class="header-right" id="header-guest">
       <button class="btn-header-login" onclick="showLoginModal()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
@@ -42,7 +39,7 @@
       </button>
     </div>
 
-    <!-- Logged-IN header right: Search + Avatar (hidden until login) -->
+    <!-- Logged-in header: Search + Avatar -->
     <div class="header-right auth-only" id="header-user" style="display:none">
       <div class="search-wrap">
         <input type="text" id="search-input" placeholder="Search for movies, TV shows..." onkeydown="if(event.key==='Enter')triggerSearch()" />
@@ -60,38 +57,21 @@
   </div>
   <div class="mobile-nav" id="mobile-nav">
     <a onclick="showPage('home');closeMobileNav()">HOME</a>
-    <!-- Mobile auth-only links -->
     <a class="mobile-auth-only" onclick="showPage('movies');closeMobileNav()">MOVIES</a>
     <a class="mobile-auth-only" onclick="showPage('tvshows');closeMobileNav()">TV SHOWS</a>
     <a class="mobile-auth-only" onclick="showPage('topmovies');closeMobileNav()">TOP IMDB</a>
     <a class="mobile-auth-only" onclick="showPage('mylist');closeMobileNav()">MY LIST</a>
     <a class="mobile-auth-only" onclick="showPage('team');closeMobileNav()">TEAM</a>
-    <!-- Mobile guest links -->
     <a class="mobile-guest-only" onclick="showLoginModal();closeMobileNav()">LOGIN</a>
     <a class="mobile-guest-only" onclick="showSignupModal();closeMobileNav()">SIGN UP</a>
   </div>
 </header>
 
-<!-- ===== HOME PAGE ===== -->
+<!-- HOME PAGE -->
 <div class="page active" id="page-home">
-
-  <!-- HERO SECTION -->
   <section class="hero-section">
     <div class="hero-bg">
-      <!-- =====================================================
-           VIDEO BACKGROUND
-           Replace "videos/hero.mp4" with your actual video path
-           e.g. "videos/myvideo.mp4" or "../videos/hero.mp4"
-           ===================================================== -->
-      <video
-        id="hero-video"
-        class="hero-video"
-        src="videos/hero.mp4"
-        autoplay
-        muted
-        loop
-        playsinline
-      ></video>
+      <video id="hero-video" class="hero-video" src="videos/hero.mp4" autoplay muted loop playsinline></video>
       <div class="hero-video-overlay"></div>
       <div class="hero-bg-gradient"></div>
       <div class="hero-embers" id="hero-embers"></div>
@@ -100,8 +80,7 @@
       <div class="hero-text">
         <h1>Unlimited Movies,<br>TV Shows, and More</h1>
         <p>Discover the best collection of movies and TV shows.<br>Anytime, anywhere.</p>
-        <!-- Change 3: Login icon + Sign Up side by side -->
-        <!-- Change 1: After login, hero CTA row is hidden -->
+        <!-- Hidden after login -->
         <div class="hero-cta-row" id="hero-cta-row">
           <button class="btn-signup-hero" onclick="showSignupModal()">Sign Up Now</button>
           <button class="btn-login-hero" onclick="showLoginModal()">
@@ -111,13 +90,12 @@
         </div>
       </div>
 
-      <!-- Change 2: Hero slide — shows rotating movie title + video bg, no cards -->
+      <!-- Hero slide: rotating movie title + dot indicators -->
       <div class="hero-slide-panel" id="hero-slide-panel">
         <div class="hero-movie-title-wrap">
           <span class="hero-now-showing">NOW SHOWING</span>
           <div class="hero-movie-title" id="hero-movie-title"></div>
         </div>
-        <!-- Dot indicators, one per HERO_SLIDES entry -->
         <div class="hero-dots" id="hero-dots">
           <span class="hero-dot active" onclick="goToHeroSlide(0)"></span>
           <span class="hero-dot" onclick="goToHeroSlide(1)"></span>
@@ -126,13 +104,11 @@
         </div>
       </div>
     </div>
-    <!-- Genre chips inside hero bottom -->
     <div class="hero-genre-strip">
       <div class="genre-strip-inner" id="home-genre-chips"></div>
     </div>
   </section>
 
-  <!-- TRENDING NOW -->
   <section class="content-section">
     <div class="section-header">
       <h2 class="section-title">Trending Now</h2>
@@ -141,7 +117,6 @@
     <div class="movies-row" id="trending-grid"></div>
   </section>
 
-  <!-- TOP RATED MOVIES -->
   <section class="content-section">
     <div class="section-header">
       <h2 class="section-title"><span class="star-icon">☆</span> Top Rated Movies</h2>
@@ -150,7 +125,6 @@
     <div class="movies-row" id="top-rated-grid"></div>
   </section>
 
-  <!-- POPULAR TV SHOWS -->
   <section class="content-section">
     <div class="section-header">
       <h2 class="section-title section-title-caps">Popular TV Shows</h2>
@@ -159,7 +133,6 @@
     <div class="movies-row" id="popular-tv-grid"></div>
   </section>
 
-  <!-- NEW RELEASES -->
   <section class="content-section">
     <div class="section-header">
       <h2 class="section-title">New Releases</h2>
@@ -169,7 +142,7 @@
   </section>
 </div>
 
-<!-- ===== MOVIES PAGE ===== -->
+<!-- MOVIES PAGE -->
 <div class="page" id="page-movies">
   <div class="mini-hero" id="mini-hero-movies">
     <video class="mini-hero-video" autoplay muted loop playsinline></video>
@@ -202,7 +175,7 @@
   </section>
 </div>
 
-<!-- ===== TV SHOWS PAGE ===== -->
+<!-- TV SHOWS PAGE -->
 <div class="page" id="page-tvshows">
   <div class="mini-hero" id="mini-hero-tvshows">
     <video class="mini-hero-video" autoplay muted loop playsinline></video>
@@ -235,7 +208,7 @@
   </section>
 </div>
 
-<!-- ===== TOP IMDB PAGE ===== -->
+<!-- TOP IMDB PAGE -->
 <div class="page" id="page-topmovies">
   <div class="mini-hero" id="mini-hero-topmovies">
     <video class="mini-hero-video" autoplay muted loop playsinline></video>
@@ -258,7 +231,7 @@
   </section>
 </div>
 
-<!-- ===== MY LIST PAGE ===== -->
+<!-- MY LIST PAGE -->
 <div class="page" id="page-mylist">
   <div class="mini-hero" id="mini-hero-mylist">
     <video class="mini-hero-video" autoplay muted loop playsinline></video>
@@ -286,7 +259,7 @@
   </section>
 </div>
 
-<!-- ===== SEARCH PAGE ===== -->
+<!-- SEARCH PAGE -->
 <div class="page" id="page-search">
   <section class="content-section" style="padding-top:2rem">
     <div class="section-header">
@@ -296,7 +269,7 @@
   </section>
 </div>
 
-<!-- ===== WATCH PAGE ===== -->
+<!-- WATCH PAGE -->
 <div class="page" id="page-watch">
   <div class="watch-container">
     <button class="back-btn" onclick="goBack()">&#8592; Back</button>
@@ -314,12 +287,12 @@
   </div>
 </div>
 
-<!-- ===== DETAIL MODAL ===== -->
+<!-- DETAIL MODAL -->
 <div class="modal-overlay" id="detail-modal" onclick="closeModal(event)">
   <div class="modal-box" id="modal-content"></div>
 </div>
 
-<!-- ===== LOGIN MODAL ===== -->
+<!-- LOGIN MODAL -->
 <div class="modal-overlay" id="login-modal" onclick="closeLoginModal(event)">
   <div class="modal-box auth-modal-box">
     <button class="modal-close" onclick="document.getElementById('login-modal').classList.remove('open')">&#10005;</button>
@@ -341,7 +314,7 @@
   </div>
 </div>
 
-<!-- ===== SIGNUP MODAL ===== -->
+<!-- SIGNUP MODAL -->
 <div class="modal-overlay" id="signup-modal" onclick="closeSignupModal(event)">
   <div class="modal-box auth-modal-box">
     <button class="modal-close" onclick="document.getElementById('signup-modal').classList.remove('open')">&#10005;</button>
@@ -381,7 +354,7 @@
   </div>
 </div>
 
-<!-- ===== TEAM PAGE ===== -->
+<!-- TEAM PAGE -->
 <div class="page" id="page-team">
   <div class="mini-hero" id="mini-hero-team">
     <video class="mini-hero-video" autoplay muted loop playsinline></video>
